@@ -70,13 +70,15 @@ public class DataInitializer implements CommandLineRunner {
     }
 
     private void initTerrains() {
+        String[] localisations = { "Tunis - Berges du Lac", "Tunis - La Marsa", "Sousse - Kantaoui",
+                "Hammamet - Yasmine", "Sfax - Route de Tunis" };
         for (int i = 1; i <= 5; i++) {
-            String nom = "Padel Court " + i;
+            String nom = "Terrain " + i;
             if (terrainRepository.findAll().stream().noneMatch(t -> t.getNom().equals(nom))) {
                 Terrain t = Terrain.builder()
                         .nom(nom)
                         .description("Terrain professionnel " + (i % 2 == 0 ? "Indoor" : "Outdoor"))
-                        .localisation("Zone " + (char) ('A' + i - 1))
+                        .localisation(localisations[i - 1])
                         .etat("DISPONIBLE")
                         .prix(40.0 + (i * 5))
                         .build();

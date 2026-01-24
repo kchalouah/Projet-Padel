@@ -34,5 +34,6 @@ public class Creneau {
     @JoinColumn(name = "terrain_id", nullable = false)
     private Terrain terrain;
 
-    // Helper to check availability could be added here or in service
+    @Transient
+    private boolean reserve;
 }

@@ -25,6 +25,8 @@ public interface AdminService {
 
     List<Creneau> getAllCreneaux();
 
+    List<Creneau> getCreneauxByTerrain(Long terrainId);
+
     // Reservations
     List<Reservation> getAllReservations();
 

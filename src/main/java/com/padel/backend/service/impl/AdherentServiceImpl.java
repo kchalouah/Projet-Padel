@@ -30,7 +30,9 @@ public class AdherentServiceImpl implements AdherentService {
 
     @Override
     public List<Creneau> getAvailableCreneaux(Long terrainId) {
-        return creneauRepository.findAvailableByTerrainId(terrainId);
+        List<Creneau> available = creneauRepository.findAvailableByTerrainId(terrainId);
+        available.forEach(c -> c.setReserve(false));
+        return available;
     }
 
     @Override

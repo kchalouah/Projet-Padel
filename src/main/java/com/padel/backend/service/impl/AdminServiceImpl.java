@@ -105,12 +105,23 @@ public class AdminServiceImpl implements AdminService {
     }
 
     @Override
+    public List<Creneau> getCreneauxByTerrain(Long terrainId) {
+        List<Creneau> creneaux = creneauRepository.findByTerrainId(terrainId);
+        List<Long> reservedCreneauIds = reservationRepository.findAll().stream()
+                .map(r -> r.getCreneau().getId())
+                .toList();
+
+        creneaux.forEach(c -> c.setReserve(reservedCreneauIds.contains(c.getId())));
+        return creneaux;
+    }
+
+    @Override
     public com.padel.backend.dto.DashboardStatsDTO getDashboardStats() {
         return com.padel.backend.dto.DashboardStatsDTO.builder()
                 .totalUsers(utilisateurRepository.count())
                 .totalReservations(reservationRepository.count())
                 .totalTerrains(terrainRepository.count())
-                .recentReservations(reservationRepository.findAll()) // In a real app, logic for "recent" would be added
+                .recentReservations(reservationRepository.findAll())
                 .build();
     }
 }

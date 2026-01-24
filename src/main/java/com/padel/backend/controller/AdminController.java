@@ -65,6 +65,11 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getAllCreneaux());
     }
 
+    @GetMapping("/creneaux/terrain/{terrainId}")
+    public ResponseEntity<List<Creneau>> getCreneauxByTerrain(@PathVariable Long terrainId) {
+        return ResponseEntity.ok(adminService.getCreneauxByTerrain(terrainId));
+    }
+
     @DeleteMapping("/creneaux/{id}")
     public ResponseEntity<Void> deleteCreneau(@PathVariable Long id) {
         adminService.deleteCreneau(id);

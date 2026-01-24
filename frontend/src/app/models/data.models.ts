@@ -13,6 +13,7 @@ export interface Creneau {
     heureDebut: string;
     heureFin: string;
     terrain: Terrain;
+    reserve?: boolean;
 }
 
 export interface Reservation {

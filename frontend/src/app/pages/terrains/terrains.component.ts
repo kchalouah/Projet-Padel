@@ -9,11 +9,13 @@ import { Terrain } from '../../models/data.models';
 })
 export class TerrainsComponent implements OnInit {
     terrains: Terrain[] = [];
-    newTerrain: Terrain = { nom: '', description: '', localisation: '', etat: 'Bon', prix: 20 };
+    newTerrain: Terrain = { nom: '', description: '', localisation: '', etat: 'DISPONIBLE', prix: 40 };
+    editMode = false;
     showForm = false;
-
     selectedTerrainId: number | null = null;
     slotForm = { date: '', start: '', end: '' };
+    selectedTerrainSlots: any[] = [];
+    showSlotsForId: number | null = null;
 
     constructor(private apiService: ApiService, public authService: AuthService) { }
 
@@ -34,12 +36,31 @@ export class TerrainsComponent implements OnInit {
         }
     }
 
+    onEdit(t: Terrain) {
+        this.newTerrain = { ...t };
+        this.editMode = true;
+        this.showForm = true;
+    }
+
+    cancelEdit() {
+        this.editMode = false;
+        this.showForm = false;
+        this.newTerrain = { nom: '', description: '', localisation: '', etat: 'DISPONIBLE', prix: 40 };
+    }
+
     addTerrain() {
-        this.apiService.createTerrain(this.newTerrain).subscribe(() => {
-            this.loadTerrains();
-            this.showForm = false;
-            this.newTerrain = { nom: '', description: '', localisation: '', etat: 'Bon', prix: 20 };
-        });
+        if (this.editMode && this.newTerrain.id) {
+            this.apiService.updateTerrain(this.newTerrain.id, this.newTerrain).subscribe(() => {
+                this.loadTerrains();
+                this.cancelEdit();
+            });
+        } else {
+            this.apiService.createTerrain(this.newTerrain).subscribe(() => {
+                this.loadTerrains();
+                this.showForm = false;
+                this.newTerrain = { nom: '', description: '', localisation: '', etat: 'DISPONIBLE', prix: 40 };
+            });
+        }
     }
 
     deleteTerrain(id: number) {
@@ -58,8 +79,34 @@ export class TerrainsComponent implements OnInit {
         if (this.selectedTerrainId) {
             this.apiService.addCreneau(this.selectedTerrainId, this.slotForm).subscribe(() => {
                 alert('Créneau ajouté !');
+                if (this.showSlotsForId === this.selectedTerrainId) {
+                    this.loadSlots(this.selectedTerrainId);
+                }
                 this.selectedTerrainId = null;
                 this.slotForm = { date: '', start: '', end: '' };
+            });
+        }
+    }
+
+    loadSlots(id: number) {
+        const role = this.authService.getUserRole();
+        if (role === 'ADMIN') {
+            this.apiService.getSlotsByTerrainAdmin(id).subscribe(data => {
+                this.selectedTerrainSlots = data;
+                this.showSlotsForId = id;
+            });
+        } else {
+            this.apiService.getAvailableCreneaux(id).subscribe(data => {
+                this.selectedTerrainSlots = data;
+                this.showSlotsForId = id;
+            });
+        }
+    }
+
+    deleteSlot(id: number) {
+        if (confirm('Supprimer ce créneau ?')) {
+            this.apiService.deleteCreneau(id).subscribe(() => {
+                if (this.showSlotsForId) this.loadSlots(this.showSlotsForId);
             });
         }
     }

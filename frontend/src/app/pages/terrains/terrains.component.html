@@ -9,28 +9,36 @@
         <div class="col">
             <div class="card shadow">
                 <div class="card-header border-0">
-                    <h3 class="mb-0">Nos Terrains de Padel</h3>
-                    <button *ngIf="authService.getUserRole() === 'ADMIN'" class="btn btn-sm btn-primary float-right"
-                        (click)="showForm = !showForm">Nouveau Terrain</button>
+                    <h3 class="mb-0">{{ editMode ? 'Modifier le Terrain' : 'Nos Terrains de Padel' }}</h3>
+                    <button *ngIf="authService.getUserRole() === 'ADMIN' && !showForm"
+                        class="btn btn-sm btn-primary float-right" (click)="showForm = true">Nouveau Terrain</button>
+                    <button *ngIf="editMode" class="btn btn-sm btn-secondary float-right mr-2"
+                        (click)="cancelEdit()">Annuler Modification</button>
                 </div>
 
                 <!-- Add Terrain Form (Admin only) -->
                 <div class="card-body" *ngIf="showForm">
                     <form (ngSubmit)="addTerrain()">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <input type="text" class="form-control" placeholder="Nom"
                                         [(ngModel)]="newTerrain.nom" name="nom" required>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <input type="text" class="form-control" placeholder="Localisation"
+                                        [(ngModel)]="newTerrain.localisation" name="localisation" required>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <input type="number" class="form-control" placeholder="Prix"
                                         [(ngModel)]="newTerrain.prix" name="prix" required>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md-3">
                                 <div class="form-group">
                                     <input type="text" class="form-control" placeholder="État (ex: DISPONIBLE)"
                                         [(ngModel)]="newTerrain.etat" name="etat" required>
@@ -83,6 +91,7 @@
                         <thead class="thead-light">
                             <tr>
                                 <th scope="col">Nom</th>
+                                <th scope="col">Localisation</th>
                                 <th scope="col">Prix</th>
                                 <th scope="col">État</th>
                                 <th scope="col">Actions</th>
@@ -91,18 +100,60 @@
                         <tbody>
                             <tr *ngFor="let t of terrains">
                                 <td>{{ t.nom }}</td>
+                                <td>{{ t.localisation }}</td>
                                 <td>{{ t.prix }} TND</td>
                                 <td>{{ t.etat }}</td>
                                 <td>
                                     <ng-container *ngIf="authService.getUserRole() === 'ADMIN'">
-                                        <button class="btn btn-sm btn-info" (click)="openSlotForm(t.id)">Ajouter
-                                            Créneau</button>
+                                        <button class="btn btn-sm btn-info" (click)="onEdit(t)">Modifier</button>
+                                        <button class="btn btn-sm btn-default"
+                                            (click)="loadSlots(t.id)">Créneaux</button>
+                                        <button class="btn btn-sm btn-primary" (click)="openSlotForm(t.id)">+</button>
                                         <button class="btn btn-sm btn-danger"
                                             (click)="deleteTerrain(t.id)">Supprimer</button>
                                     </ng-container>
                                     <ng-container *ngIf="authService.getUserRole() === 'ADHERENT'">
                                         <a routerLink="/book" class="btn btn-sm btn-success">Réserver</a>
                                     </ng-container>
+                                </td>
+                            </tr>
+                            <!-- Slots Listing for Admin -->
+                            <tr *ngIf="showSlotsForId">
+                                <td colspan="4" class="bg-secondary p-4">
+                                    <div class="d-flex justify-content-between align-items-center mb-3">
+                                        <h4 class="mb-0">Créneaux pour le terrain sélectionné</h4>
+                                        <button class="btn btn-sm btn-link text-muted"
+                                            (click)="showSlotsForId = null">Fermer</button>
+                                    </div>
+                                    <table class="table table-sm table-white">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Heure</th>
+                                                <th>État</th>
+                                                <th>Action</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr *ngFor="let s of selectedTerrainSlots">
+                                                <td>{{s.date}}</td>
+                                                <td>{{s.heureDebut}} - {{s.heureFin}}</td>
+                                                <td>
+                                                    <span class="badge"
+                                                        [ngClass]="s.reserve ? 'badge-warning' : 'badge-success'">
+                                                        {{ s.reserve ? 'Réservé' : 'Libre' }}
+                                                    </span>
+                                                </td>
+                                                <td>
+                                                    <button *ngIf="!s.reserve" class="btn btn-sm btn-danger py-0"
+                                                        (click)="deleteSlot(s.id)">Supprimer</button>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="!selectedTerrainSlots.length">
+                                                <td colspan="4" class="text-center">Aucun créneau.</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
                                 </td>
                             </tr>
                         </tbody>

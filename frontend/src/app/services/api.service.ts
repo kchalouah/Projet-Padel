@@ -21,6 +21,10 @@ export class ApiService {
         return this.http.post<Terrain>(`${this.apiUrl}/admin/terrains`, terrain);
     }
 
+    updateTerrain(id: number, terrain: Terrain): Observable<Terrain> {
+        return this.http.put<Terrain>(`${this.apiUrl}/admin/terrains/${id}`, terrain);
+    }
+
     deleteTerrain(id: number): Observable<void> {
         return this.http.delete<void>(`${this.apiUrl}/admin/terrains/${id}`);
     }
@@ -62,6 +66,10 @@ export class ApiService {
         });
     }
 
+    getSlotsByTerrainAdmin(terrainId: number): Observable<Creneau[]> {
+        return this.http.get<Creneau[]>(`${this.apiUrl}/admin/creneaux/terrain/${terrainId}`);
+    }
+
     getAllReservationsAdmin(): Observable<Reservation[]> {
         return this.http.get<Reservation[]>(`${this.apiUrl}/admin/reservations`);
     }
@@ -72,5 +80,9 @@ export class ApiService {
 
     refuseReservation(id: number): Observable<Reservation> {
         return this.http.put<Reservation>(`${this.apiUrl}/admin/reservations/${id}/refuser`, {});
+    }
+
+    deleteCreneau(id: number): Observable<void> {
+        return this.http.delete<void>(`${this.apiUrl}/admin/creneaux/${id}`);
     }
 }
