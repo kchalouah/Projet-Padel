@@ -1,0 +1,50 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt--7">
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <h3 class="mb-0">Mes Réservations</h3>
+                    <a routerLink="/book" class="btn btn-sm btn-primary float-right">Réserver un terrain</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Date & Heure</th>
+                                <th scope="col">Terrain</th>
+                                <th scope="col">Statut</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let r of reservations">
+                                <td>
+                                    {{ r.creneau.date }} <br>
+                                    {{ r.creneau.heureDebut }} - {{ r.creneau.heureFin }}
+                                </td>
+                                <td>{{ r.terrain.nom }}</td>
+                                <td>
+                                    <span class="badge badge-dot mr-4">
+                                        <i
+                                            [ngClass]="{'bg-warning': r.statut === 'EN_ATTENTE', 'bg-success': r.statut === 'VALIDEE', 'bg-danger': r.statut === 'REFUSEE'}"></i>
+                                        {{ r.statut }}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button class="btn btn-sm btn-outline-danger"
+                                        (click)="cancel(r.id)">Annuler</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

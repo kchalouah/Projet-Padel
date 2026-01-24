@@ -1,0 +1,103 @@
+<div class="header pb-8 pt-5 pt-lg-8 d-flex align-items-center"
+  style="min-height: 400px; background-image: url(assets/img/theme/profile-cover.jpg); background-size: cover; background-position: center top;">
+  <!-- Mask -->
+  <span class="mask bg-gradient-danger opacity-8"></span>
+  <!-- Header container -->
+  <div class="container-fluid d-flex align-items-center">
+    <div class="row">
+      <div class="col-lg-7 col-md-10">
+        <h1 class="display-2 text-white">Bonjour {{getUserName()}}</h1>
+        <p class="text-white mt-0 mb-5">Ceci est votre page de profil. Vous pouvez gérer vos informations personnelles
+          et mettre à jour votre mot de passe.</p>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="container-fluid mt--7">
+  <div class="row">
+    <div class="col-xl-4 order-xl-2 mb-5 mb-xl-0">
+      <div class="card card-profile shadow">
+        <div class="row justify-content-center">
+          <div class="col-lg-3 order-lg-2">
+            <div class="card-profile-image d-flex justify-content-center">
+              <a href="javascript:void(0)">
+                <div
+                  class="rounded-circle bg-info d-flex align-items-center justify-content-center text-white font-weight-bold"
+                  style="width: 150px; height: 150px; font-size: 60px;">
+                  {{getUserName().charAt(0)}}
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="card-header text-center border-0 pt-8 pt-md-4 pb-0 pb-md-4">
+        </div>
+        <div class="card-body pt-0 pt-md-4">
+          <div class="text-center mt-md-5">
+            <h3>
+              {{getUserName()}}
+            </h3>
+            <div class="h5 font-weight-300">
+              <i class="ni email-83 mr-2"></i>{{getUserEmail()}}
+            </div>
+            <hr class="my-4" />
+            <p>Bienvenue sur votre espace PadelTn.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="col-xl-8 order-xl-1">
+      <div class="card bg-secondary shadow">
+        <div class="card-header bg-white border-0">
+          <div class="row align-items-center">
+            <div class="col-8">
+              <h3 class="mb-0">Mon compte</h3>
+            </div>
+          </div>
+        </div>
+        <div class="card-body">
+          <h6 class="heading-small text-muted mb-4">Changement de mot de passe</h6>
+          <div class="pl-lg-4 bg-secondary p-4 rounded shadow-sm">
+            <form (ngSubmit)="changePassword()">
+              <div *ngIf="successMessage" class="alert alert-success mt-3">
+                {{successMessage}}
+              </div>
+              <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+                {{errorMessage}}
+              </div>
+
+              <div class="row">
+                <div class="col-lg-12">
+                  <div class="form-group">
+                    <label class="form-control-label">Mot de passe actuel</label>
+                    <input type="password" [(ngModel)]="passwordForm.currentPassword" name="currentPassword"
+                      class="form-control form-control-alternative" required>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label">Nouveau mot de passe</label>
+                    <input type="password" [(ngModel)]="passwordForm.newPassword" name="newPassword"
+                      class="form-control form-control-alternative" required>
+                  </div>
+                </div>
+                <div class="col-lg-6">
+                  <div class="form-group">
+                    <label class="form-control-label">Confirmer le nouveau mot de passe</label>
+                    <input type="password" [(ngModel)]="passwordForm.confirmPassword" name="confirmPassword"
+                      class="form-control form-control-alternative" required>
+                  </div>
+                </div>
+              </div>
+              <div class="text-center">
+                <button type="submit" class="btn btn-primary mt-4">Mettre à jour le mot de passe</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

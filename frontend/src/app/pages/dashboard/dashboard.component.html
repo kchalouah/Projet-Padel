@@ -1,0 +1,169 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+  <div class="container-fluid">
+    <div class="header-body">
+      <!-- Admin Stats Dashboard -->
+      <div *ngIf="role === 'ADMIN' && stats" class="row">
+        <div class="col-xl-4 col-lg-6">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Utilisateurs</h5>
+                  <span class="h2 font-weight-bold mb-0">{{stats.totalUsers}}</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-danger text-white rounded-circle shadow">
+                    <i class="fas fa-users"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-lg-6">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Réservations</h5>
+                  <span class="h2 font-weight-bold mb-0">{{stats.totalReservations}}</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-warning text-white rounded-circle shadow">
+                    <i class="fas fa-calendar-check"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xl-4 col-lg-6">
+          <div class="card card-stats mb-4 mb-xl-0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col">
+                  <h5 class="card-title text-uppercase text-muted mb-0">Terrains</h5>
+                  <span class="h2 font-weight-bold mb-0">{{stats.totalTerrains}}</span>
+                </div>
+                <div class="col-auto">
+                  <div class="icon icon-shape bg-info text-white rounded-circle shadow">
+                    <i class="fas fa-table-tennis"></i>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Adherent Welcome Dashboard -->
+      <div *ngIf="role === 'ADHERENT'" class="row">
+        <div class="col">
+          <h1 class="text-white">Bienvenue dans votre espace Padel</h1>
+          <p class="text-white">Gérez vos réservations et trouvez des terrains disponibles.</p>
+          <a routerLink="/book" class="btn btn-secondary">Réserver maintenant</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container-fluid mt--7">
+  <!-- Admin Recent Reservations -->
+  <div *ngIf="role === 'ADMIN'" class="row mt-5">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">Réservations Récentes</h3>
+            </div>
+            <div class="col text-right">
+              <a routerLink="/admin-reservations" class="btn btn-sm btn-primary">Voir tout</a>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Adhérent</th>
+                <th scope="col">Terrain</th>
+                <th scope="col">Date</th>
+                <th scope="col">Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let res of stats?.recentReservations">
+                <td>{{res.utilisateur.nom}} {{res.utilisateur.prenom}}</td>
+                <td>{{res.terrain.nom}}</td>
+                <td>{{res.creneau.date}} {{res.creneau.heureDebut}}</td>
+                <td>
+                  <span class="badge badge-dot mr-4">
+                    <i [ngClass]="{
+                      'bg-warning': res.statut === 'EN_ATTENTE',
+                      'bg-success': res.statut === 'VALIDEE',
+                      'bg-danger': res.statut === 'REFUSEE'
+                    }"></i> {{res.statut}}
+                  </span>
+                </td>
+              </tr>
+              <tr *ngIf="!stats?.recentReservations?.length">
+                <td colspan="4" class="text-center">Aucune réservation récente</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Adherent My Reservations List -->
+  <div *ngIf="role === 'ADHERENT'" class="row mt-5">
+    <div class="col">
+      <div class="card shadow">
+        <div class="card-header border-0">
+          <div class="row align-items-center">
+            <div class="col">
+              <h3 class="mb-0">Mes Prochaines Réservations</h3>
+            </div>
+            <div class="col text-right">
+              <a routerLink="/my-reservations" class="btn btn-sm btn-primary">Gérer mes réservations</a>
+            </div>
+          </div>
+        </div>
+        <div class="table-responsive">
+          <table class="table align-items-center table-flush">
+            <thead class="thead-light">
+              <tr>
+                <th scope="col">Terrain</th>
+                <th scope="col">Date</th>
+                <th scope="col">Heure</th>
+                <th scope="col">Statut</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let res of reservations">
+                <td>{{res.terrain.nom}}</td>
+                <td>{{res.creneau.date}}</td>
+                <td>{{res.creneau.heureDebut}} - {{res.creneau.heureFin}}</td>
+                <td>
+                  <span class="badge badge-dot mr-4">
+                    <i [ngClass]="{
+                      'bg-warning': res.statut === 'EN_ATTENTE',
+                      'bg-success': res.statut === 'VALIDEE',
+                      'bg-danger': res.statut === 'REFUSEE'
+                    }"></i> {{res.statut}}
+                  </span>
+                </td>
+              </tr>
+              <tr *ngIf="!reservations?.length">
+                <td colspan="4" class="text-center">Vous n'avez pas encore de réservations.</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

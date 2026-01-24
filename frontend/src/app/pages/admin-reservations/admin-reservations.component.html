@@ -1,0 +1,57 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt--7">
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <h3 class="mb-0">Gestion des Réservations</h3>
+                </div>
+                <div class="table-responsive">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Adhérent</th>
+                                <th scope="col">Terrain</th>
+                                <th scope="col">Date</th>
+                                <th scope="col">Heure</th>
+                                <th scope="col">Statut</th>
+                                <th scope="col">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let res of reservations">
+                                <td>{{res.utilisateur.nom}} {{res.utilisateur.prenom}}</td>
+                                <td>{{res.terrain.nom}}</td>
+                                <td>{{res.creneau.date}}</td>
+                                <td>{{res.creneau.heureDebut}} - {{res.creneau.heureFin}}</td>
+                                <td>
+                                    <span class="badge badge-dot mr-4">
+                                        <i [ngClass]="{
+                      'bg-warning': res.statut === 'EN_ATTENTE',
+                      'bg-success': res.statut === 'VALIDEE',
+                      'bg-danger': res.statut === 'REFUSEE'
+                    }"></i> {{res.statut}}
+                                    </span>
+                                </td>
+                                <td>
+                                    <button *ngIf="res.statut === 'EN_ATTENTE'" class="btn btn-sm btn-success"
+                                        (click)="validate(res.id)">Valider</button>
+                                    <button *ngIf="res.statut === 'EN_ATTENTE'" class="btn btn-sm btn-danger"
+                                        (click)="refuse(res.id)">Refuser</button>
+                                </td>
+                            </tr>
+                            <tr *ngIf="!reservations.length">
+                                <td colspan="6" class="text-center">Aucune réservation trouvée.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

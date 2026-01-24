@@ -1,0 +1,72 @@
+<div class="header bg-gradient-danger pb-8 pt-5 pt-md-8">
+    <div class="container-fluid">
+        <div class="header-body">
+        </div>
+    </div>
+</div>
+<div class="container-fluid mt--7">
+    <div class="row">
+        <div class="col">
+            <div class="card shadow">
+                <div class="card-header border-0">
+                    <h3 class="mb-0" *ngIf="!selectedTerrain">Choisir un Terrain</h3>
+                    <h3 class="mb-0" *ngIf="selectedTerrain">
+                        <button class="btn btn-sm btn-secondary" (click)="back()">Retour</button>
+                        Créneaux pour {{ selectedTerrain.nom }}
+                    </h3>
+                </div>
+
+                <div class="card-body" *ngIf="message">
+                    <div class="alert alert-warning">{{ message }}</div>
+                </div>
+
+                <div class="table-responsive" *ngIf="!selectedTerrain">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Nom</th>
+                                <th scope="col">Prix</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let t of terrains">
+                                <td>{{ t.nom }}</td>
+                                <td>{{ t.prix }} TND</td>
+                                <td>
+                                    <button class="btn btn-sm btn-primary" (click)="selectTerrain(t)">Voir
+                                        Créneaux</button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="table-responsive" *ngIf="selectedTerrain">
+                    <table class="table align-items-center table-flush">
+                        <thead class="thead-light">
+                            <tr>
+                                <th scope="col">Date</th>
+                                <th scope="col">Heure</th>
+                                <th scope="col">Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let c of creneaux">
+                                <td>{{ c.date }}</td>
+                                <td>{{ c.heureDebut }} - {{ c.heureFin }}</td>
+                                <td>
+                                    <button class="btn btn-sm btn-success" (click)="book(c)">Réserver</button>
+                                </td>
+                            </tr>
+                            <tr *ngIf="creneaux.length === 0">
+                                <td colspan="3">Aucun créneau disponible.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>
