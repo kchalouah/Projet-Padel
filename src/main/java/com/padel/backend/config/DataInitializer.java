@@ -95,10 +95,7 @@ public class DataInitializer implements CommandLineRunner {
         for (int i = 0; i < 7; i++) {
             LocalDate date = today.plusDays(i);
             for (Terrain t : terrains) {
-                // Check if slots exist for this terrain and date to avoid duplicates
-                // Note: This is a simple check, a real app might use a repository method
-                // existsByTerrainAndDate...
-                // Here we assume if we have 0 slots for that t/date, we create them.
+
                 if (creneauRepository.findAll().stream()
                         .noneMatch(c -> c.getTerrain().getId().equals(t.getId()) && c.getDate().equals(date))) {
                     createSlot(t, date, LocalTime.of(10, 0), LocalTime.of(11, 30));

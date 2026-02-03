@@ -51,7 +51,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                 }
             }
         } catch (Exception e) {
-            // Log error or ignore invalid token to allow anonymous access (e.g., for login)
             System.err.println("JWT Verification Failed: " + e.getMessage());
         }
         filterChain.doFilter(request, response);

@@ -23,7 +23,7 @@ public class EmailServiceImpl implements EmailService {
         message.setSubject("Bienvenue sur Padel Réservation - Vos identifiants");
         message.setText("Bonjour,\n\nVotre compte a été créé avec succès.\n" +
                 "Voici votre mot de passe pour vous connecter : " + password + "\n\n" +
-                "Veuillez le changer dès votre première connexion.\n\n" +
+                "Vous pouvez le changer dès votre première connexion.\n\n" +
                 "Cordialement,\nL'équipe Padel.");
 
         javaMailSender.send(message);

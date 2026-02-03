@@ -21,7 +21,7 @@ public class AdminController {
 
     private final AdminService adminService;
 
-    // --- Terrains ---
+
     @PostMapping("/terrains")
     public ResponseEntity<Terrain> createTerrain(@RequestBody Terrain terrain) {
         return ResponseEntity.ok(adminService.createTerrain(terrain));
@@ -43,9 +43,7 @@ public class AdminController {
         return ResponseEntity.ok(adminService.getAllTerrains());
     }
 
-    // --- Creneaux ---
-    // Example: POST
-    // /api/admin/creneaux?terrainId=1&date=2024-01-20&start=10:00&end=11:30
+
     @PostMapping("/creneaux")
     public ResponseEntity<Creneau> createCreneau(
             @RequestParam Long terrainId,
@@ -76,7 +74,7 @@ public class AdminController {
         return ResponseEntity.noContent().build();
     }
 
-    // --- Reservations ---
+
     @GetMapping("/reservations")
     public ResponseEntity<List<Reservation>> getAllReservations() {
         return ResponseEntity.ok(adminService.getAllReservations());
