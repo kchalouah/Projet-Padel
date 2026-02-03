@@ -54,9 +54,7 @@
 
 ---
 
-## 📚 Documentation
-- Les diagrammes Use Case et de Classes sont disponibles dans le fichier `UML_Diagrams.md`.
-- Un jeu de données de test (Tunisian context) est injecté automatiquement au démarrage (`DataInitializer`).
+## 📚 Documentation- Un jeu de données de test (Tunisian context) est injecté automatiquement au démarrage (`DataInitializer`).
 
 ---
 &copy; 2026 PadelTn - Tous droits réservés.
